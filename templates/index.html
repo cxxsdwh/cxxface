@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+            <title>Title</title>
+    </head>
+    <body>
+        
+            <div style="position: absolute; top: 150px; left:0px;font-size: 40px">
+                <input id="avatarSlect" type="file" style="position: absolute;float: left; z-index: 10; opacity: 0;width: 400px; height: 400px;">
+                    <img id="avatarPreview"  title="点击更换图片" style="position: absolute; z-index: 9; float: left; width: 400px; height: 400px">
+                        </div>
+        </div>
+        <p id="hhh" style="font-size: 50px"></>
+    </body>
+    <!-- Bootstrap core JavaScript -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/DataTables/js/datatables.min.js"></script>
+    <script src="/static/vendor/DataTables/js/ellipsis.js"></script>
+    
+    <script>
+    $(function () {
+          
+        $("#avatarSlect").change(function () {
+                                 
+         var obj=$("#avatarSlect")[0].files[0];
+         var wuc=window.URL.createObjectURL(obj);
+         $("#avatarPreview").attr('src',wuc);
+         
+         var obj = document.getElementById("hhh");
+         obj.innerHTML= "上传中";
+         var formData=new FormData();
+         formData.append('avatar', $("#avatarSlect")[0].files[0]);  /*获取上传的图片对象*/
+         $.ajax({
+                url: '/upload_image',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success:function(response){
+                obj.innerHTML= response['name'];
+                if(response['name']=="N"){
+                var name=prompt("不在数据库中,可输名添加");
+                    if (name!=null && name!=""){
+                    var formd=new FormData();
+                    formd.append('message',response['message']);
+                    formd.append('name', name);
+                
+                obj.innerHTML= name;
+                
+                    $.ajax({
+                           url: '/add_data',
+                           type: 'POST',
+                           data: formd,
+                           contentType: false,
+                           processData: false,
+                           })
+                    }
+                }
+                
+                
+                }
+         })
+         })
+      })
+    
+
+    </script>
+</html>
