@@ -102,14 +102,14 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route('/app/face')
+@app.route('/face')
 def index():
     return render_template('./index.html')
 #ini image record
 img_re=['' for i in range(100)]
 img_re_n=100
 img_re_i=0
-@app.route("/app/null/<myid>")
+@app.route("/null/<myid>")
 def request_image_null(myid):
     global img_re_i
     b=b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x01KiTXtXML:com.adobe.xmp\x00\x00\x00\x00\x00<?xpacket begin="\xef\xbb\xbf" id="W5M0MpCehiHzreSzNTczkc9d"?>\n<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c140 79.160451, 2017/05/06-01:08:21        ">\n <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n  <rdf:Description rdf:about=""/>\n </rdf:RDF>\n</x:xmpmeta>\n<?xpacket end="r"?>-CD\xb7\x00\x00\x00\x0bIDAT\x08\x99c\xf8\x0f\x04\x00\t\xfb\x03\xfd\xe3U\xf2\x9c\x00\x00\x00\x00IEND\xaeB`\x82'
@@ -121,10 +121,10 @@ def request_image_null(myid):
     img_re[img_re_i]=myid
     img_re_i=(img_re_i+1)%100
     return resp
-@app.route("/app/mail")
+@app.route("/mail")
 def mail_status():
     return '<br/>'.join((img_re[img_re_i:img_re_n]+img_re[0:img_re_i])[::-1])
-@app.route('/app/upload_image', methods=['POST'])
+@app.route('/upload_image', methods=['POST'])
 def upload_image():
     try:
         tmp = request.files['avatar']
@@ -145,7 +145,7 @@ def upload_image():
             'name':"server is busy,try again later"
         }
         return jsonify(response), 200
-@app.route('/app/add_data', methods=['POST'])
+@app.route('/add_data', methods=['POST'])
 def add_data():
     try:
         add_face(np.fromstring(base64.b64decode(request.form['message']),dtype=np.float32),request.form['name'])

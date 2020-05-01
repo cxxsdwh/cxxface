@@ -11,9 +11,6 @@
                     <img id="avatarPreview" style="position: absolute; z-index: 9; float: left; width: 400px; height: 400px">
                         </div>
         </div>
-        <div style="position: absolute; top: 550px; left:10px">
-                <input type="text" name="threshold" id="threshold" value="0.9">
-        </div>
         <p id="hhh" style="font-size: 50px">点击方框内部选择图片</>
     </body>
     <!-- Bootstrap core JavaScript -->
@@ -23,7 +20,8 @@
     <script src="/static/vendor/DataTables/js/ellipsis.js"></script>
     
     <script>
-    $(function () { 
+    $(function () {
+          
         $("#avatarSlect").change(function () {
                                  
          var obj=$("#avatarSlect")[0].files[0];
@@ -34,13 +32,10 @@
          obj.innerHTML= "上传中";
          var formData=new FormData();
          formData.append('avatar', $("#avatarSlect")[0].files[0]);  /*获取上传的图片对象*/
-        var tt = $("#threshold").val()
-	formData.append('threshold', tt);
-	$.ajax({
-                url: '/app/upload_image',
+         $.ajax({
+                url: '/upload_image',
                 type: 'POST',
                 data: formData,
-		cache: false,
                 contentType: false,
                 processData: false,
                 success:function(response){
@@ -55,15 +50,13 @@
                 obj.innerHTML= name;
                 
                     $.ajax({
-                           url: '/app/add_data',
+                           url: '/add_data',
                            type: 'POST',
                            data: formd,
                            contentType: false,
                            processData: false,
                            })
                     }
-                }else{
-                    obj.innerHTML= response['name']+" "+response['distance'];
                 }
                 
                 
